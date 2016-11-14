@@ -27,47 +27,30 @@ namespace ProfileParsing.Domain.Services
 
         private static string getPersonName(HtmlDocument doc)
         {
-            HtmlNodeCollection collection = doc.DocumentNode.SelectNodes("//span");
-            var profileName = string.Empty;
-            foreach (HtmlNode span in collection)
-            {
-                profileName = span.InnerText;
-            }
+            HtmlNode fullNameNode = doc.DocumentNode.SelectSingleNode("//span[@class='full-name']");
+            var profileName = fullNameNode.InnerHtml;
             return profileName;
         }
 
         private static string getCurrentTitle(HtmlDocument doc)
         {
-            HtmlNodeCollection collection = doc.DocumentNode.SelectNodes("//span");
-            var profileName = string.Empty;
-            foreach (HtmlNode span in collection)
-            {
-                profileName = span.InnerText;
-            }
+            HtmlNode fullNameNode = doc.DocumentNode.SelectSingleNode("//p[@class='title']");
+            var profileName = fullNameNode.InnerHtml;
             return profileName;
-
         }
 
         private static string getCurrentPosition(HtmlDocument doc)
         {
-            HtmlNodeCollection collection = doc.DocumentNode.SelectNodes("//span");
-            var profileName = string.Empty;
-            foreach (HtmlNode span in collection)
-            {
-                profileName = span.InnerText;
-            }
-            return profileName;
+            HtmlNode currentPositionNode = doc.DocumentNode.SelectSingleNode("//div[@class='editable-item section-item current-position']//h4//a");
+            var currentPosition = currentPositionNode.InnerHtml;
+            return currentPosition;
         }
 
         private static string getSummary(HtmlDocument doc)
         {
-            HtmlNodeCollection collection = doc.DocumentNode.SelectNodes("//span");
-            var profileName = string.Empty;
-            foreach (HtmlNode span in collection)
-            {
-                profileName = span.InnerText;
-            }
-            return profileName;
+            HtmlNode currentPositionNode = doc.DocumentNode.SelectSingleNode("//div[@class='summary']//p[@class='description']");
+            var summary = currentPositionNode.InnerHtml;            
+            return summary;
         }
 
         private static string getSkills(HtmlDocument doc)
