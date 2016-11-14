@@ -1,0 +1,1 @@
+c:\users\aviab\documents\visual studio 2015\Projects\ProfileParsing\ProfileParsing.Domain\obj\Debug\ProfileParsing.Domain.csprojResolveAssemblyReference.cache
