@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
@@ -22,6 +23,7 @@ namespace ProfileParsing.Domain.Services
 
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(profilePageRes);
+            getPersonName(doc);
             getPersonName(doc);
         }
 
@@ -55,36 +57,51 @@ namespace ProfileParsing.Domain.Services
 
         private static string getSkills(HtmlDocument doc)
         {
-            HtmlNodeCollection collection = doc.DocumentNode.SelectNodes("//span");
-            var profileName = string.Empty;
-            foreach (HtmlNode span in collection)
+            HtmlNodeCollection skillNodes = doc.DocumentNode.SelectNodes("//ul[@class='skills-section']//span[@class='endorse-item-name']//a");
+            var skillList = new List<string>();
+            foreach (HtmlNode skill in skillNodes)
             {
-                profileName = span.InnerText;
+                skillList.Add(skill.InnerHtml);
             }
-            return profileName;
+            return JsonConvert.SerializeObject(skillList);
         }
 
         private static string getExperience(HtmlDocument doc)
         {
-            HtmlNodeCollection collection = doc.DocumentNode.SelectNodes("//span");
-            var profileName = string.Empty;
-            foreach (HtmlNode span in collection)
+            List<dynamic> expList = new List<dynamic>();
+            HtmlNodeCollection positionTitleNodes = doc.DocumentNode.SelectNodes("//div[@id='background-experience']//div//div//h4");
+            HtmlNodeCollection summaryNodes = doc.DocumentNode.SelectNodes("//div[@id='background-experience']//p[@class='description summary-field-show-more']");
+
+            for (int i = 0; i < positionTitleNodes.Count; i++)
             {
-                profileName = span.InnerText;
+                expList.Add(
+                    new { title = positionTitleNodes[i].InnerHtml,
+                          positionSummary = summaryNodes[i].InnerHtml
+                        });
+
             }
-            return profileName;
+
+            return JsonConvert.SerializeObject(expList);
         }
 
         private static string getEducation(HtmlDocument doc)
         {
-            HtmlNodeCollection collection = doc.DocumentNode.SelectNodes("//span");
-            var profileName = string.Empty;
-            foreach (HtmlNode span in collection)
-            {
-                profileName = span.InnerText;
-            }
-            return profileName;
+            List<dynamic> educationList = new List<dynamic>();
+            HtmlNodeCollection schoolTitleNodes = doc.DocumentNode.SelectNodes("//div[@id=background-education]//h4[@class='summary fn org']//a");
+            HtmlNodeCollection facultyNodes = doc.DocumentNode.SelectNodes("//div[@id=background-education]//h5[@class='major']//a");
 
+            for (int i = 0; i < schoolTitleNodes.Count; i++)
+            {
+                educationList.Add(
+                    new
+                    {
+                        school = schoolTitleNodes[i].InnerHtml,
+                        faculty = facultyNodes[i].InnerHtml
+                    });
+
+            }
+
+            return JsonConvert.SerializeObject(educationList);
         }
     }
 }

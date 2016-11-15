@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProfileParsing.Data
+namespace ProfileParsing.Data.Repositories
 {
-    public class Class1
+    class ProfileRep
     {
     }
 }
