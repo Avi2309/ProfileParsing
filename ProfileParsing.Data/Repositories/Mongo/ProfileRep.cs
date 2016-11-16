@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace ProfileParsing.Data.Repositories
 {
-    class ProfileRep
+    public class ProfileRep
     {
+
     }
 }

@@ -1,0 +1,7 @@
+C:\Users\aviab\documents\visual studio 2015\Projects\ProfileParsing\ProfileParsing.Data\bin\Debug\ProfileParsing.Data.dll
+C:\Users\aviab\documents\visual studio 2015\Projects\ProfileParsing\ProfileParsing.Data\bin\Debug\ProfileParsing.Data.pdb
+C:\Users\aviab\documents\visual studio 2015\Projects\ProfileParsing\ProfileParsing.Data\bin\Debug\Newtonsoft.Json.dll
+C:\Users\aviab\documents\visual studio 2015\Projects\ProfileParsing\ProfileParsing.Data\bin\Debug\Newtonsoft.Json.xml
+C:\Users\aviab\documents\visual studio 2015\Projects\ProfileParsing\ProfileParsing.Data\obj\Debug\ProfileParsing.Data.dll
+C:\Users\aviab\documents\visual studio 2015\Projects\ProfileParsing\ProfileParsing.Data\obj\Debug\ProfileParsing.Data.pdb
+C:\Users\aviab\documents\visual studio 2015\Projects\ProfileParsing\ProfileParsing.Data\obj\Debug\ProfileParsing.Data.csprojResolveAssemblyReference.cache
