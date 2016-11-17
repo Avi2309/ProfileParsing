@@ -6,13 +6,20 @@ using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
+using ProfileParsing.Data.Contracts;
+using ProfileParsing.Data.Models;
 using RestSharp;
 
 namespace ProfileParsing.Domain.Services
 {
-    public static class ProfileParsing
+    public class ProfileParsing
     {
-        public static bool Parse(string i_profileUri)
+        private IProfileRep profileRep;
+        public ProfileParsing(IProfileRep i_profileRep)
+        {
+            profileRep = i_profileRep;
+        } 
+        public bool Parse(string i_profileUri)
         {
             var profileUri = new Uri(i_profileUri);
             var client = new RestClient(profileUri);
@@ -23,39 +30,48 @@ namespace ProfileParsing.Domain.Services
 
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(profilePageRes);
-            getPersonName(doc);
-            getPersonName(doc);
+
+            Profile newProfile = new Profile();
+            newProfile.FullName = getPersonName(doc);
+            newProfile.CurrentTitle = getCurrentTitle(doc);
+            newProfile.CurrentPosition = getCurrentPosition(doc);
+            newProfile.Summary = getSummary(doc);
+            newProfile.ListOfSkills = getSkills(doc);
+            newProfile.Experience = getExperience(doc);
+            newProfile.Education = getEducation(doc);
+
+            profileRep.
         }
 
-        private static string getPersonName(HtmlDocument doc)
+        private string getPersonName(HtmlDocument doc)
         {
             HtmlNode fullNameNode = doc.DocumentNode.SelectSingleNode("//span[@class='full-name']");
             var profileName = fullNameNode.InnerHtml;
             return profileName;
         }
 
-        private static string getCurrentTitle(HtmlDocument doc)
+        private string getCurrentTitle(HtmlDocument doc)
         {
             HtmlNode fullNameNode = doc.DocumentNode.SelectSingleNode("//p[@class='title']");
             var profileName = fullNameNode.InnerHtml;
             return profileName;
         }
 
-        private static string getCurrentPosition(HtmlDocument doc)
+        private string getCurrentPosition(HtmlDocument doc)
         {
             HtmlNode currentPositionNode = doc.DocumentNode.SelectSingleNode("//div[@class='editable-item section-item current-position']//h4//a");
             var currentPosition = currentPositionNode.InnerHtml;
             return currentPosition;
         }
 
-        private static string getSummary(HtmlDocument doc)
+        private string getSummary(HtmlDocument doc)
         {
             HtmlNode currentPositionNode = doc.DocumentNode.SelectSingleNode("//div[@class='summary']//p[@class='description']");
             var summary = currentPositionNode.InnerHtml;            
             return summary;
         }
 
-        private static string getSkills(HtmlDocument doc)
+        private string getSkills(HtmlDocument doc)
         {
             HtmlNodeCollection skillNodes = doc.DocumentNode.SelectNodes("//ul[@class='skills-section']//span[@class='endorse-item-name']//a");
             var skillList = new List<string>();
@@ -66,7 +82,7 @@ namespace ProfileParsing.Domain.Services
             return JsonConvert.SerializeObject(skillList);
         }
 
-        private static string getExperience(HtmlDocument doc)
+        private string getExperience(HtmlDocument doc)
         {
             List<dynamic> expList = new List<dynamic>();
             HtmlNodeCollection positionTitleNodes = doc.DocumentNode.SelectNodes("//div[@id='background-experience']//div//div//h4");
@@ -84,7 +100,7 @@ namespace ProfileParsing.Domain.Services
             return JsonConvert.SerializeObject(expList);
         }
 
-        private static string getEducation(HtmlDocument doc)
+        private string getEducation(HtmlDocument doc)
         {
             List<dynamic> educationList = new List<dynamic>();
             HtmlNodeCollection schoolTitleNodes = doc.DocumentNode.SelectNodes("//div[@id=background-education]//h4[@class='summary fn org']//a");

@@ -13,7 +13,7 @@ namespace ProfileParsing.Data.Models
     {
         [BsonId]
         public string Id { get; set; } 
-        public string Name { get; set; }
+        public string FullName { get; set; }
         public string CurrentTitle { get; set; }
         public string CurrentPosition { get; set; }
         public string Summary { get; set; }
