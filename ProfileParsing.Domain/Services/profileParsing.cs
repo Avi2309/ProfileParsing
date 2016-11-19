@@ -15,32 +15,42 @@ namespace ProfileParsing.Domain.Services
     public class ProfileParsing
     {
         private IProfileRep profileRep;
+
         public ProfileParsing(IProfileRep i_profileRep)
         {
             profileRep = i_profileRep;
-        } 
-        public bool Parse(string i_profileUri)
+        }
+
+        public void Parse(string i_profileUri)
         {
             var profileUri = new Uri(i_profileUri);
             var client = new RestClient(profileUri);
             var request = new RestRequest(Method.GET);
 
-            IRestResponse response = client.Execute(request);
-            var profilePageRes = response.Content;
+            try
+            {
+                IRestResponse response = client.Execute(request);
+                var profilePageRes = response.Content;
 
-            HtmlDocument doc = new HtmlDocument();
-            doc.LoadHtml(profilePageRes);
+                HtmlDocument doc = new HtmlDocument();
+                doc.LoadHtml(profilePageRes);
 
-            Profile newProfile = new Profile();
-            newProfile.FullName = getPersonName(doc);
-            newProfile.CurrentTitle = getCurrentTitle(doc);
-            newProfile.CurrentPosition = getCurrentPosition(doc);
-            newProfile.Summary = getSummary(doc);
-            newProfile.ListOfSkills = getSkills(doc);
-            newProfile.Experience = getExperience(doc);
-            newProfile.Education = getEducation(doc);
+                Profile newProfile = new Profile();
+                newProfile.FullName = getPersonName(doc);
+                newProfile.CurrentTitle = getCurrentTitle(doc);
+                newProfile.CurrentPosition = getCurrentPosition(doc);
+                newProfile.Summary = getSummary(doc);
+                newProfile.ListOfSkills = getSkills(doc);
+                newProfile.Experience = getExperience(doc);
+                newProfile.Education = getEducation(doc);
 
-            profileRep.
+                profileRep.SetNewProfile(newProfile);
+            }
+            catch (Exception)
+            {
+                throw new Exception();
+            }
+
         }
 
         private string getPersonName(HtmlDocument doc)
@@ -71,7 +81,7 @@ namespace ProfileParsing.Domain.Services
             return summary;
         }
 
-        private string getSkills(HtmlDocument doc)
+        private List<string> getSkills(HtmlDocument doc)
         {
             HtmlNodeCollection skillNodes = doc.DocumentNode.SelectNodes("//ul[@class='skills-section']//span[@class='endorse-item-name']//a");
             var skillList = new List<string>();
@@ -79,7 +89,7 @@ namespace ProfileParsing.Domain.Services
             {
                 skillList.Add(skill.InnerHtml);
             }
-            return JsonConvert.SerializeObject(skillList);
+            return skillList;
         }
 
         private string getExperience(HtmlDocument doc)

@@ -23,13 +23,13 @@ namespace ProfileParsing.Data.Repositories
         public ProfileRep(string connectionString)
         {
             var client = new MongoClient(connectionString);
-            _db = client.GetDatabase("Test");
+            _db = client.GetDatabase("ProfileParsing");
         }
-        public async Task<bool> SetNewProfile(Profile profile)
+        public async Task<bool> SetNewProfile(Profile i_profile)
         {
             try
             {
-                await _db.GetCollection<Profile>("Profiles").InsertOneAsync(profile);
+                await _db.GetCollection<Profile>("Profiles").InsertOneAsync(i_profile);
             }
             catch (Exception)
             {
@@ -39,11 +39,11 @@ namespace ProfileParsing.Data.Repositories
             return true;
         }
 
-        public async Task<List<Profile>> SearchProfiles(string fullName)
+        public async Task<List<Profile>> SearchProfiles(string i_fullName)
         {
             try
             {
-                var result = await _db.GetCollection<Profile>("Profiles").FindAsync(x => x.FullName == fullName);
+                var result = await _db.GetCollection<Profile>("Profiles").FindAsync(x => x.FullName.Contains(i_fullName));
                 return result.ToList();
             }
             catch (Exception)
@@ -52,10 +52,19 @@ namespace ProfileParsing.Data.Repositories
             }
         }
 
-        public async Task ProfilesBySkills(List<string> skillList)
+        public async Task<List<Profile>> ProfilesBySkills(List<string> i_skillList)
         {
-            JsonConvert.SerializeObject(skillList);
-            _db.GetCollection<Profile>("Profiles").FindAsync(x => (JsonConvert.SerializeObject(x.ListOfSkills)));
+            try
+            {
+                var result = await _db.GetCollection<Profile>("Profiles")
+                            .FindAsync(x => x.ListOfSkills
+                                .Intersect(i_skillList).Any());
+                return result.ToList();                
+            }
+            catch(Exception)
+            {
+                return null;
+            }        
         }
     }
 }

@@ -17,7 +17,7 @@ namespace ProfileParsing.Data.Models
         public string CurrentTitle { get; set; }
         public string CurrentPosition { get; set; }
         public string Summary { get; set; }
-        public string ListOfSkills { get; set; }
+        public List<string> ListOfSkills { get; set; }
         public string Experience { get; set; }
         public string Education { get; set; }
     }

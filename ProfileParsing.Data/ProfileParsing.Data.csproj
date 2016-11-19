@@ -57,9 +57,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contracts\IProfileRep.cs" />
-    <Compile Include="Models\Profile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\Mongo\ProfileRep.cs" />
+    <Compile Include="Repositories\Sql\ProfileRep.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
