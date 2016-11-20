@@ -13,11 +13,12 @@ using MongoDB.Bson.IO;
 using MongoDB.Driver;
 using MongoDB.Driver.Core;
 using Newtonsoft.Json;
+using ProfileParsing.Data.Contracts;
 using JsonConvert = Newtonsoft.Json.JsonConvert;
 
 namespace ProfileParsing.Data.Repositories
 {
-    public class ProfileRep
+    public class ProfileRep: IProfileRep
     {
         private readonly IMongoDatabase _db;
         public ProfileRep(string connectionString)

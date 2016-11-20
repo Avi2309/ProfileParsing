@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 using ProfileParsing.Domain.Contracts;
@@ -10,11 +11,6 @@ namespace ProfileParsing.Controllers
         private readonly IProfileParsing _profileParsing;
         private readonly IProfileQuery _profileQuery;
 
-        public ProfileController(IProfileParsing i_profileParsing, IProfileQuery i_profileQuery)
-        {
-            _profileParsing = i_profileParsing;
-            _profileQuery = i_profileQuery;
-        }
 
         [Route("api/profile")]
         [HttpPost]
@@ -22,7 +18,7 @@ namespace ProfileParsing.Controllers
         {
             try
             {
-                _profileParsing.Parse(i_profileUrl);
+                await _profileParsing.Parse(i_profileUrl);
                 return Ok();
             }
             catch (Exception)
@@ -31,32 +27,32 @@ namespace ProfileParsing.Controllers
             }
         }
 
-        [Route("api/searchPeople")]
+        [Route("api/searchByName")]
         [HttpPost]
-        public async Task<IHttpActionResult> searchPeople(string name)
+        public async Task<string> SearchPeople(string name)
         {
             try
             {
-                return _profileQuery.profileByName(name).Result;
+                return await  _profileQuery.profileByName(name);
             }
             catch (Exception)
             {
-
+                return string.Empty;
             }
         }
 
-        [Route("api/peopleBySkills")]
+        [Route("api/searchBySkills")]
         [HttpPost]
-        public async Task<IHttpActionResult> peopleBySkills()
+        public async Task<string> peopleBySkills(List<string> skillsList)
         {
 
             try
             {
-
+                return await _profileQuery.ProfileBySkills(skillsList);
             }
             catch (Exception)
             {
-
+                return string.Empty;
             }
         }
     }

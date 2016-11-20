@@ -9,7 +9,7 @@ namespace ProfileParsing.Domain.Contracts
 {
     public interface IProfileQuery
     {
-        List<Profile> ProfileBySkills(List<string> i_skillsList);
-        Task<List<Profile>> profileByName(string i_name);
+        Task<string> ProfileBySkills(List<string> i_skillsList);
+        Task<string> profileByName(string i_name);
     }
 }

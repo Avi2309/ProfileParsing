@@ -8,6 +8,6 @@ namespace ProfileParsing.Domain.Contracts
 {
     public interface IProfileParsing
     {
-        void Parse(string i_profileUri);
+        Task Parse(string i_profileUri);
     }
 }

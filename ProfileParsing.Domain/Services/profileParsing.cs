@@ -8,11 +8,12 @@ using HtmlAgilityPack;
 using Newtonsoft.Json;
 using ProfileParsing.Data.Contracts;
 using ProfileParsing.Data.Models;
+using ProfileParsing.Domain.Contracts;
 using RestSharp;
 
 namespace ProfileParsing.Domain.Services
 {
-    public class ProfileParsing
+    public class ProfileParsing: IProfileParsing
     {
         private IProfileRep profileRep;
 
@@ -21,7 +22,7 @@ namespace ProfileParsing.Domain.Services
             profileRep = i_profileRep;
         }
 
-        public void Parse(string i_profileUri)
+        public async Task Parse(string i_profileUri)
         {
             var profileUri = new Uri(i_profileUri);
             var client = new RestClient(profileUri);
@@ -44,7 +45,7 @@ namespace ProfileParsing.Domain.Services
                 newProfile.Experience = getExperience(doc);
                 newProfile.Education = getEducation(doc);
 
-                profileRep.SetNewProfile(newProfile);
+                await profileRep.SetNewProfile(newProfile);
             }
             catch (Exception)
             {

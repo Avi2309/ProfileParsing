@@ -57,12 +57,12 @@
   <ItemGroup>
     <Compile Include="Contracts\IProfileParsing.cs" />
     <Compile Include="Contracts\IProfileQuery.cs" />
-    <Compile Include="Models\Profile.cs" />
     <Compile Include="Services\ProfileParsing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ProfileQuery.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

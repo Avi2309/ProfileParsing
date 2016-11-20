@@ -6,11 +6,12 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Routing;
 using Autofac;
-using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using System.Web.Http.Dependencies;
 using ProfileParsing.Data.Contracts;
 using ProfileParsing.Data.Repositories;
+using ProfileParsing.Domain.Contracts;
+using ProfileParsing.Domain.Services;
 
 namespace ProfileParsing
 {
@@ -22,13 +23,23 @@ namespace ProfileParsing
             RegisterIOC();
         }
 
-        private void RegisterIOC()
+         public void RegisterIOC()
         {            
             var builder = new ContainerBuilder();
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
             builder
                 .RegisterType<ProfileRep>()
                 .As<IProfileRep>()
+                .InstancePerLifetimeScope();
+
+            builder
+                .RegisterType<Domain.Services.ProfileParsing>()
+                .As<IProfileParsing>()
+                .InstancePerLifetimeScope();
+
+            builder
+                .RegisterType<ProfileQuery>()
+                .As<IProfileQuery>()
                 .InstancePerLifetimeScope();
 
             var container = builder.Build();

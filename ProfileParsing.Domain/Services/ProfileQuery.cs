@@ -5,13 +5,15 @@ using System.Linq;
 using System.Runtime.Caching;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using ProfileParsing.Data.Contracts;
 using ProfileParsing.Data.Models;
+using ProfileParsing.Domain.Contracts;
 
 
 namespace ProfileParsing.Domain.Services
 {
-    public class ProfileQuery
+    public class ProfileQuery: IProfileQuery
     {
         private readonly IProfileRep profileRep;
 
@@ -19,17 +21,17 @@ namespace ProfileParsing.Domain.Services
         {
             profileRep = i_profileRep;
         }
-        public Task<List<Profile>> profileByName(string i_name) 
+        public async Task<string> profileByName(string i_name) 
         {
-            var profilesResult = profileRep.SearchProfiles(i_name);
-            return profilesResult;
+            var profilesResult = await profileRep.SearchProfiles(i_name);
+            return JsonConvert.SerializeObject(profilesResult);
         }
 
-        public List<Profile> ProfileBySkills(List<string> i_skillsList)
+        public async Task<string> ProfileBySkills(List<string> i_skillsList)
         {
             var memoryCache = MemoryCache.Default;
             var skillsListToGet = new List<string>();
-            List<Profile> profilesRes = new List<Profile>();
+            var profilesRes = new List<Profile>();
 
             try
             {
@@ -45,7 +47,7 @@ namespace ProfileParsing.Domain.Services
                     }
                 }
 
-                var profilesRepRes = profileRep.ProfilesBySkills(skillsListToGet);
+                var profilesRepRes = await profileRep.ProfilesBySkills(skillsListToGet);
 
                 int cacheExpireMin;
                 if (!int.TryParse(ConfigurationManager.AppSettings["cacheExpireMin"], out cacheExpireMin))
@@ -54,14 +56,14 @@ namespace ProfileParsing.Domain.Services
 
                 foreach (var skill in skillsListToGet)
                 {
-                    var matchProfiles = profilesRepRes.Result.Where(x => x.ListOfSkills.Contains(skill)).ToList();
+                    var matchProfiles = profilesRepRes.Where(x => x.ListOfSkills.Contains(skill)).ToList();
                     profilesRes.AddRange(matchProfiles);
                     memoryCache.Add("skill." + skill, matchProfiles, expiration);
                 }
 
                 List<Profile> profilesResGroupById = profilesRes.GroupBy(x => x.Id)
                     .Select(grp => grp.FirstOrDefault()).ToList();
-                return profilesResGroupById;
+                return JsonConvert.SerializeObject(profilesResGroupById);
             }
             catch (Exception)
             {
