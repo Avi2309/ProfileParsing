@@ -2,57 +2,62 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Description;
+using System.Web.Http.ModelBinding;
+using Newtonsoft.Json.Converters;
 using ProfileParsing.Domain.Contracts;
 
 namespace ProfileParsing.Controllers
 {
+    [RoutePrefix("api")]
     public class ProfileController : ApiController
     {
         private readonly IProfileParsing _profileParsing;
         private readonly IProfileQuery _profileQuery;
 
 
-        [Route("api/profile")]
-        [HttpPost]
-        public async Task<IHttpActionResult> setProfile(string i_profileUrl)
+        [Route("SetProfile")]
+        [HttpPost]        
+        public async Task<IHttpActionResult> SetProfile([FromBody]string profileUri)
         {
             try
             {
-                await _profileParsing.Parse(i_profileUrl);
-                return Ok();
+                await _profileParsing.Parse(profileUri);
+                return Ok(new {result = "success"});
             }
             catch (Exception)
             {
-                return BadRequest();
+                return BadRequest("Error");
             }
         }
 
-        [Route("api/searchByName")]
+        [Route("SearchByName")]
         [HttpPost]
-        public async Task<string> SearchPeople(string name)
+        [ResponseType(typeof(String))]
+        public async Task<IHttpActionResult> SearchByName([FromBody]string name)
         {
             try
             {
-                return await  _profileQuery.profileByName(name);
+                return Ok(await  _profileQuery.profileByName(name));
             }
             catch (Exception)
             {
-                return string.Empty;
+                return BadRequest("Error");
             }
         }
 
-        [Route("api/searchBySkills")]
+        [Route("SearchBySkills")]
         [HttpPost]
-        public async Task<string> peopleBySkills(List<string> skillsList)
+        [ResponseType(typeof(String))]
+        public async Task<IHttpActionResult> SearchBySkills([FromBody]List<string> skillsList)
         {
-
             try
             {
-                return await _profileQuery.ProfileBySkills(skillsList);
+                return Ok(await _profileQuery.ProfileBySkills(skillsList));
             }
             catch (Exception)
             {
-                return string.Empty;
+                return BadRequest("Error");
             }
         }
     }

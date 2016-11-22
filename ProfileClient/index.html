@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html ng-app="profiles" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Profiles Parse & Search</title>
+    <script src="//code.jquery.com/jquery.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<h1 class="text-center">Profiles Parse & Search</h1>
+
+<div ng-controller="profilesCtrl" style="margin-top: 5%;margin-left: 15%">
+
+    <span>Parse linkedin profile: </span>
+    <input type="text" placeholder="Type linkedin Uri..." ng-model="linkedinProfileUrl">
+    <input type="button" ng-click="parseProfileUri()" value="Parse">
+    <br>
+    <br>
+    <span>Search by name: </span>
+    <input type="text" placeholder="Type here..." ng-model="name">
+    <input type="button" ng-click="searchProfileByName()" value="Search">
+    <br>
+    <br>
+    <span>Search by skills seperated by commas: </span>
+    <input type="text" placeholder="Type here..." ng-model="skills">
+    <input type="button" value="Search" ng-click="searchProfileBySkills()">
+    <br>
+    <br>
+
+    <div>
+        <div ng-repeat="p in profiles">
+            <span>Profiles results:</span>
+            <div>
+                <span>Full name:</span>
+                <textarea>{{p.fullName}}</textarea>
+            </div>
+            <div>
+                <span>Current title:</span>
+                <textarea>{{p.currentTitle}}</textarea>
+            </div>
+            <div>
+                <span>Current position:</span>
+                <textarea>{{p.currentPosition}}</textarea>
+            </div>
+            <div>
+                <span>Summary:</span>
+                <textarea>{{p.summary}}</textarea>
+            </div>
+            <div>
+                <span>List of skills:</span>
+                <textarea>{{p.listOfSkills}}</textarea>
+            </div>
+            <div>
+                <span>Experience:</span>
+                <textarea>{{p.experience}}</textarea>
+            </div>
+            <div>
+                <span>Education:</span>
+                <textarea>{{p.education}}</textarea>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="js/components/parseAndSearch.js"></script>
+</body>
+</html>
