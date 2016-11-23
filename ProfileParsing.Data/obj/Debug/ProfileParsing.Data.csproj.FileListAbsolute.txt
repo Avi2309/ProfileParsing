@@ -45,3 +45,4 @@ C:\Users\aviab\Documents\Visual Studio 2015\Projects\ProfileParsing\ProfileParsi
 C:\Users\aviab\Documents\Visual Studio 2015\Projects\ProfileParsing\ProfileParsing.Data\bin\Debug\System.Net.Http.Formatting.xml
 C:\Users\aviab\Documents\Visual Studio 2015\Projects\ProfileParsing\ProfileParsing.Data\bin\Debug\System.Web.Http.xml
 C:\Users\aviab\Documents\Visual Studio 2015\Projects\ProfileParsing\ProfileParsing.Data\obj\Debug\ProfileParsing.Data.csprojResolveAssemblyReference.cache
+C:\Users\Avi\documents\visual studio 2015\Projects\ProfileParsing\ProfileParsing.Data\obj\Debug\ProfileParsing.Data.csprojResolveAssemblyReference.cache
