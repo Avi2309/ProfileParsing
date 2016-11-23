@@ -35,6 +35,8 @@ namespace ProfileParsing.Domain.Services
 
             try
             {
+                /*first i wanna check if skill exists in mem cache amd if it isn't so add 
+                it to skills list for getting related profiles from db*/
                 foreach (var skill in i_skillsList)
                 {
                     if (!memoryCache.Contains("skill." + skill))
