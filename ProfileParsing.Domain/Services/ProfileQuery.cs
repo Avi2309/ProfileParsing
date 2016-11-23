@@ -55,7 +55,7 @@ namespace ProfileParsing.Domain.Services
                 var expiration = DateTimeOffset.UtcNow.AddMinutes(cacheExpireMin);
 
                 foreach (var skill in skillsListToGet)
-                {
+                { 
                     var matchProfiles = profilesRepRes.Where(x => x.ListOfSkills.Contains(skill)).ToList();
                     profilesRes.AddRange(matchProfiles);
                     memoryCache.Add("skill." + skill, matchProfiles, expiration);

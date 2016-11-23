@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -15,18 +16,25 @@ namespace ProfileParsing.Controllers
         private readonly IProfileParsing _profileParsing;
         private readonly IProfileQuery _profileQuery;
 
+        public ProfileController(IProfileQuery i_profileQuery, IProfileParsing i_profileParsing)
+        {
+            _profileQuery = i_profileQuery;
+            _profileParsing = i_profileParsing;
+        }
+
 
         [Route("SetProfile")]
         [HttpPost]        
-        public async Task<IHttpActionResult> SetProfile([FromBody]string profileUri)
+        public async Task<IHttpActionResult> SetProfile(string profileUri)
         {
             try
             {
                 await _profileParsing.Parse(profileUri);
                 return Ok(new {result = "success"});
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Debug.Write(ex);
                 return BadRequest("Error");
             }
         }
@@ -40,8 +48,9 @@ namespace ProfileParsing.Controllers
             {
                 return Ok(await  _profileQuery.profileByName(name));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Debug.Write(ex);
                 return BadRequest("Error");
             }
         }
@@ -55,8 +64,9 @@ namespace ProfileParsing.Controllers
             {
                 return Ok(await _profileQuery.ProfileBySkills(skillsList));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Debug.Write(ex);
                 return BadRequest("Error");
             }
         }
